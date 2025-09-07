@@ -1,0 +1,70 @@
+@use '../../../../styles.scss' as *;
+
+* {
+    font-family: 'DM Sans', sans-serif;
+}
+
+section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: var(--mainpage-bg);
+    position: relative;
+    min-height: 100vh;
+    @media (max-width: 500px) {
+        height: auto;
+    }
+}
+
+.imprint-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 165rem;
+    text-align: start;
+    .imprint-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        width: 100%;
+        padding: 15rem 9.6rem;
+        gap: 2rem;
+        @media (max-width: 769px) {
+            padding: 15rem 3.2rem;
+        }
+        @media (max-width: 350px) {
+            padding: 15rem 1rem;
+        }
+        h2 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.2;
+            @media (max-width: 769px) {
+                font-size: 2.4rem;
+            }
+            @media (max-width: 480px) {
+                font-size: 2rem;
+            }
+        }
+        h3 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--pramery-purple);
+            line-height: 1.3;
+            @media (max-width: 480px) {
+                font-size: 1.8rem;
+            }
+        }
+        p {
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--white);
+            line-height: 1.6;
+            @media (max-width: 480px) {
+                font-size: 1.4rem;
+            }
+        }
+    }
+}

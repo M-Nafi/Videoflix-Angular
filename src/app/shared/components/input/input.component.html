@@ -1,0 +1,7 @@
+<div class="input-wrapper">
+	<img class="input-icons" [src]="togglePlaceholderIcon()" alt="Mail Icon" />
+	<input class="input" [type]="type" [placeholder]="placeholder" [value]="value" #inputRef (input)="onInput(inputRef.value)" (blur)="onTouched()" />
+	@if(isVisible) {
+	<img class="pw-visibility-icon" [src]="srcRight" alt="Password visibility icon" (click)="toggleVisibilityPw()" [ngStyle]="fixPosImg()" />
+	}
+</div>

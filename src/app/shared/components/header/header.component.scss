@@ -1,0 +1,72 @@
+@use '../../../../styles.scss' as *;
+
+* {
+    font-family: 'DM Sans', sans-serif;
+}
+
+section {
+    @include flex-center;
+    min-width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 165rem;
+        padding: 4.8rem 9.6rem;
+        background-color: transparent;
+    }
+}
+
+@media (max-width: 769px) {
+    .desktop-logo {
+        display: none;
+    }
+
+    .mobile-logo {
+        display: block;
+    }
+
+    section {
+        .header {
+            padding: 1.6rem 3.2rem;
+        }
+    }
+}
+
+@media (max-width: 350px) {
+    section {
+        .header {
+            padding: 1.6rem 1rem;
+        }
+    }
+}
+
+:host(.videopreview-header) section {
+    .header {
+        max-width: 96rem;
+    }
+}
+
+.videoplayer-back-btn,
+.imprint-back-btn,
+.privacy-back-btn {
+    @include flex-center;
+    padding: 1.2rem 2.4rem;
+    border-radius: 4rem;
+    background: none;
+    cursor: pointer;
+    img {
+        height: 2.4rem;
+        width: 2.4rem;
+    }
+}
+
+.video-title {
+    opacity: 0.4;
+    color: white;
+}

@@ -1,0 +1,47 @@
+.atf-img {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+		url("/assets/img/login-bg.jpg");
+}
+
+.forgot-pw {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	a {
+		color: var(--white);
+		text-decoration: none;
+		cursor: pointer;
+		font-size: 1.8rem;
+		font-weight: 500;
+		&:hover {
+			color: var(--pramery-purple);
+			transition: color 0.5s ease, transform 0.5s ease;
+		}
+	}
+}
+
+.signup-now {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+	font-size: 1.8rem;
+	font-weight: 500;
+	color: var(--utility-white);
+	a {
+		font-weight: 700;
+		color: var(--white);
+		text-decoration: none;
+		cursor: pointer;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	@media (max-width: 480px) {
+		font-size: 1.6rem;
+	}
+	
+}

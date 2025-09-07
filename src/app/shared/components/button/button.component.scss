@@ -1,0 +1,18 @@
+.form-btn {
+	padding: 1.2rem 2.4rem;
+	background-color: var(--pramery-purple);
+	color: var(--white);
+	border: none;
+	border-radius: 4rem;
+	font-size: 1.6rem;
+	font-weight: 600;
+	cursor: pointer;
+
+	&:disabled {
+		cursor: not-allowed;
+	}
+}
+
+.disable-btn {
+	background-color: var(--grey);
+}

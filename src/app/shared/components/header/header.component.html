@@ -1,0 +1,38 @@
+<section>
+    <div class="header" [ngClass]="{ 'videoplayer-header': currentRoute === '/video-player' }">
+        <div class="desktop-logo">
+            <img src="/assets/img/videoflix-main.svg" />
+        </div>
+        <div class="mobile-logo d-none">
+            <img src="/assets/img/videoflix-mobile.svg" />
+        </div>
+
+        @if (currentRoute === '/mainpage') {
+            <app-button (click)="onLogout()">
+                <img src="/assets/icons/logout.svg" />Log out
+            </app-button>
+        } 
+        @else if (currentRoute === '/video-player') {
+            <div class="video-title">{{ videoTitle }}</div>
+            <app-button class="videoplayer-back-btn" (click)="goBack()">
+                <img src="/assets/icons/arrow_back.svg" />
+            </app-button>            
+        } 
+        @else if (currentRoute === '/preview') {
+            <app-button routerLink="">
+                <img src="/assets/icons/logout.svg" />Log out
+            </app-button>
+        } 
+        @else if (currentRoute === '/imprint' || currentRoute === '/privacy-policy') {
+            <app-button (click)="goBack()" [ngClass]="{
+                'imprint-back-btn': currentRoute === '/imprint',
+                'privacy-back-btn': currentRoute === '/privacy-policy'}">
+                <img src="/assets/icons/arrow_back.svg" />
+            </app-button>
+
+		} 
+        @else if (currentRoute !== '/login') {
+		    <app-button routerLink="/login">Log in</app-button>
+		}
+	</div>
+</section>

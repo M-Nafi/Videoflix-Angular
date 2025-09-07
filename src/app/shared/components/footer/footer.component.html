@@ -1,0 +1,26 @@
+<section>
+    @if (showFooter()) { 
+        @if (currentRoute === '/mainpage') {
+            <div class="mainpage-footer">
+                <a routerLink="/privacy-policy">Privacy Policy</a>
+                <a routerLink="/imprint">Imprint</a>
+            </div>
+        } 
+        @else if (currentRoute === '/privacy-policy') {
+            <div class="privacy-footer">
+                <a routerLink="/imprint">Imprint</a>
+            </div>
+        } 
+        @else if (currentRoute === '/imprint') {
+            <div class="imprint-footer">
+                <a routerLink="/privacy-policy">Privacy Policy</a>
+            </div>
+        } 
+        @else {
+            <div class="footer-legal-links">
+                <a routerLink="/privacy-policy">Privacy Policy</a>
+                <a routerLink="/imprint">Imprint</a>
+            </div>
+        } 
+    }
+</section>

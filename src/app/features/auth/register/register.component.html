@@ -1,0 +1,54 @@
+<div class="atf-img card-wrapper">
+	<div class="card">
+		<h2>Sign up</h2>
+		<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+			<app-input
+				class="form-input"
+				formControlName="email"
+				type="email"
+				placeholder="Email Address"
+			>
+			</app-input>
+			<div class="error">
+				@if (showError('email')) {
+				{{ errorMessage("email") }}
+				} @else { }
+			</div>
+
+			<app-input
+				class="form-input"
+				formControlName="password"
+				type="password"
+				placeholder="Enter a password"
+				[isVisible]="true"
+			>
+			</app-input>
+			<div class="error">
+				@if (showError('password')) {
+				{{ errorMessage("password") }}
+				} @else { }
+			</div>
+
+			<app-input
+				class="form-input"
+				formControlName="confirmed_password"
+				type="password"
+				placeholder="Confirm Password"
+				[isVisible]="true"
+			>
+			</app-input>
+			<div class="error">
+				@if (showError('confirmed_password')) {
+				{{ errorMessage("confirmed_password") }}
+				} @else if (showPasswordMismatch) { ⚠ Passwords must match }
+				@else { }
+			</div>
+			<app-button
+				class="form-button"
+				type="submit"
+				[disabled]="registerForm.invalid"
+				>Get Started</app-button
+			>
+		</form>
+	</div>
+</div>

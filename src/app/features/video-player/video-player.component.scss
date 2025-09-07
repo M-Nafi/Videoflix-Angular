@@ -1,0 +1,45 @@
+@use '../../../styles.scss' as *;
+
+* {
+    font-family: 'DM Sans', sans-serif;
+}
+
+section {
+    background-color: var(--mainpage-bg);
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        video {
+            width: 100%;
+            object-fit: cover;
+            display: block;
+        }
+    }
+}
+
+::ng-deep app-header .desktop-logo {
+    display: none;
+}
+
+::ng-deep app-header .mobile-logo {
+    display: block !important;
+}
+
+::ng-deep app-header .header {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 2rem 3.2rem !important;
+}
+
+::ng-deep app-header .header.hide {
+    opacity: 0 !important;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}

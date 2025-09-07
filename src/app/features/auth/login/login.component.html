@@ -1,0 +1,43 @@
+<div class="atf-img card-wrapper">
+	<div class="card">
+		<h2>Log in</h2>
+		<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+			<app-input
+				class="form-input"
+				formControlName="email"
+				type="email"
+				placeholder="Email Address"
+			>
+			</app-input>
+			<div class="error">
+				@if (showError('email')) {
+				{{ errorMessage("email") }}
+				} @else { }
+			</div>
+
+			<app-input
+				class="form-input"
+				formControlName="password"
+				type="password"
+				placeholder="Enter a password"
+				[isVisible]="true"
+			>
+			</app-input>
+			<div class="error">
+				@if (showError('password')) {
+				{{ errorMessage("password") }}
+				} @else { }
+			</div>
+			<app-button type="submit" [disabled]="loginForm.invalid"
+				>Login</app-button
+			>
+		</form>
+		<div class="forgot-pw">
+			<a routerLink="/forgot-password">Forgot password?</a>
+		</div>
+		<div class="signup-now">
+			<span>New to Videoflix?</span>
+			<a routerLink="/register">Sign Up now</a>
+		</div>
+	</div>
+</div>

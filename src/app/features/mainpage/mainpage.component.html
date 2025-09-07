@@ -1,0 +1,39 @@
+<section>
+    <div class="content-wrapper">
+        <div class="mainpage-top-content">
+            <div class="video-info-container">
+                <div class="video-info">
+                    @let v = video(); @if(v) {
+                    <h1>{{ v.title }}</h1>
+                    <p>{{ v.description }}</p>
+                    }
+                    <button (click)="playVideo()">
+                        <img src="/assets/icons/play_arrow.svg" />Play
+                    </button>
+                </div>
+            </div>
+
+            <div class="video-wrapper">
+                <video #previewVideo autoplay loop muted playsinline></video>
+            </div>
+        </div>
+
+        <div class="mainpage-bottom-content">
+            @for (section of videoSections; track section.title) {
+            <div class="video-frame-lines">
+                <h3>{{ section.title }}</h3>
+                <div class="scroll-container">
+                    <div class="frames">
+                        @for (image of section.images; track image) {
+                        <a (click)="onImageClick(image)">
+                            <img [src]="image" loading="eager"/>
+                        </a>
+                        }
+                    </div>
+                    <div class="fade-overlay-right"></div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>

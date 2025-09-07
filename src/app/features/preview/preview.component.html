@@ -1,0 +1,33 @@
+<section>   
+    <div class="content-wrapper">
+        <div class="video-wrapper">
+            <video autoplay muted loop playsinline>
+                <source
+                    src="assets/movies/movie-mainpage.mp4"
+                    type="video/mp4"
+                />
+                Dein Browser unterstützt kein Video.
+            </video>
+        </div>
+
+        <div class="mobile-video-info-container">
+            <div class="video-info">
+                <h1>Breakout</h1>
+                <p>
+                    In a high-security prison, a wrongly convicted man
+                    formulates a meticulous plan to break out and prove his
+                    innocence. He must navigate a web of alliances and betrayals
+                    to reclaim his freedom and expose the truth.
+                </p>
+                <div class="button-container">
+                    <button routerLink="/video-player">
+                        <img src="/assets/icons/play_arrow.svg" />Play
+                    </button>
+                    <button (click)="goBack()">
+                        <img class="arrow-back" src="/assets/icons/arrow_back.svg"/>Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
