@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { VideoService } from '../../services/video.service';
+import { VideoService } from '../../core/services/video.service';
 import Hls from 'hls.js';
 
 @Component({

@@ -9,7 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import Hls from 'hls.js';
-import { Video, VideoService } from '../../services/video.service';
+import { Video, VideoService } from '../../core/services/video.service';
 
 interface VideoSection {
     title: string;

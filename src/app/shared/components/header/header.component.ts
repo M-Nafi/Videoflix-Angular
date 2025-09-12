@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { effect } from '@angular/core';
-import { VideoService } from '../../../services/video.service';
+import { VideoService } from '../../../core/services/video.service';
 import { ButtonComponent } from '../button/button.component';
 import { AuthService } from '../../../core/services/auth.service';
 
