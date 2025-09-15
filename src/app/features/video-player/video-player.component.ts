@@ -1,13 +1,6 @@
-import {
-    Component,
-    ViewChild,
-    ElementRef,
-    Renderer2,
-    OnDestroy,
-} from '@angular/core';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { VideoService } from '../../core/services/video.service';
+import { Component, ViewChild, ElementRef, Renderer2, OnDestroy, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { VideoService, Video } from '../../core/services/video.service';
 import Hls from 'hls.js';
 
 @Component({
@@ -15,83 +8,54 @@ import Hls from 'hls.js';
     templateUrl: './video-player.component.html',
     styleUrls: ['./video-player.component.scss'],
 })
-export class VideoPlayerComponent implements OnDestroy {
+export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     @ViewChild('videoElement', { static: true })
     videoRef!: ElementRef<HTMLVideoElement>;
 
+    video?: Video;
     videoUrl = '';
     private hls?: Hls;
 
     /**
-     * Initializes the video player component and sets up the necessary
-     * subscriptions for query params and video data.
-     *
+     * Constructor for the VideoPlayerComponent.
+     * It gets the video from the history state, navigates to the mainpage if the video is not found,
+     * sets the video title to the video service title property, and sets the video URL to the HLS URL of the video.
+     * @param router The router service for navigating to the mainpage.
+     * @param renderer The renderer service for rendering the component.
+     * @param videoService The video service for getting the video title and URL.
      */
     constructor(
-        private location: Location,
-        private renderer: Renderer2,
-        private el: ElementRef,
-        private route: ActivatedRoute,
         private router: Router,
+        private renderer: Renderer2,
         private videoService: VideoService
     ) {
-        this.route.queryParams.subscribe((params) => {
-            const slug = params['slug'];
-            if (!slug) return;
-
-            const normalizedSlug = this.normalizeSlug(slug);
-
-            if (!this.isValidSlug(normalizedSlug)) {
-                this.router.navigate(['/not-found']);
-                return;
-            }
-
-            this.videoService
-                .getVideoBySlug(normalizedSlug)
-                .subscribe((video) => {
-                    if (!video) {
-                        this.router.navigate(['/not-found']);
-                        return;
-                    }
-
-                    this.videoService.title.set(video.title);
-                    this.videoUrl = this.videoService.getHlsUrl(
-                        normalizedSlug,
-                        '480p'
-                    );
-                    this.initHlsPlayer();
-                });
-        });
+        this.video = history.state.video;
+        if (!this.video) {
+            this.router.navigate(['/mainpage']);
+            return;
+        }
+        this.videoService.title.set(this.video.title);
+        this.videoUrl = this.videoService.getHlsUrl(this.video, '480p');
     }
 
     /**
-     * Normalizes a slug by removing leading and trailing whitespace
-     * and replacing consecutive whitespace characters with a single underscore.
-     *
+     * Lifecycle hook that is called after the component's view has been initialized.
+     * It checks if the video and video element references are available, and if so, initializes the HLS player.
      */
-    private normalizeSlug(slug: string): string {
-        return slug.trim().replace(/\s+/g, '_');
+    ngAfterViewInit(): void {
+        if (this.video && this.videoRef) {
+            this.initHlsPlayer();
+        }
     }
 
     /**
-     * Checks if a slug is valid by testing if it matches the pattern
-     * /^[a-zA-Z0-9_-]+$/. Valid slugs can only contain alphanumeric characters,
-     * underscores, and hyphens.
+     * Initializes the HLS player if supported by the browser and the
+     * video element, and attaches it to the video element. If the browser
+     * does not support HLS or the video element is not available, the
+     * video src is set to the video URL and the video is played.
      *
-     */
-    private isValidSlug(slug: string): boolean {
-        const slugPattern = /^[a-zA-Z0-9_-]+$/;
-        return slugPattern.test(slug);
-    }
-
-    /**
-     * Initializes the HLS player if supported by the browser and the video element,
-     * and attaches it to the video element. If the browser does not support HLS or the
-     * video element is not available, the video src is set to the video URL and the
-     * video is played.
-     *
-     * Emits an error event if there is an error during the HLS initialization or playback.
-     *
+     * Emits an error event if there is an error during the HLS initialization
+     * or playback.
      */
     private initHlsPlayer(): void {
         const videoEl = this.videoRef.nativeElement;
@@ -121,18 +85,15 @@ export class VideoPlayerComponent implements OnDestroy {
     }
 
     /**
-     * Navigates the user back to the main page.
-     *
+     * Navigates back to the mainpage.
      */
     goBack(): void {
         this.router.navigate(['/mainpage']);
     }
 
     /**
-     * Toggles the visibility of the header component by adding or removing the
-     * 'hide' class to the header element. If the header element is not found,
-     * nothing happens.
-     *
+     * Toggles the visibility of the header component.
+     * @param hide A boolean indicating whether the header should be hidden or not.
      */
     toggleHeader(hide: boolean): void {
         const header = document.querySelector('app-header .header');
@@ -144,8 +105,8 @@ export class VideoPlayerComponent implements OnDestroy {
     }
 
     /**
-     * Hides the header after a delay of 5 seconds.
-     *
+     * Hides the header component after a delay of 5000 milliseconds.
+     * This method is called when the video is playing and the header should be hidden.
      */
     hideHeader(): void {
         setTimeout(() => {
@@ -154,8 +115,8 @@ export class VideoPlayerComponent implements OnDestroy {
     }
 
     /**
-     * Shows the header after a delay of 500 milliseconds.
-     *
+     * Shows the header component after a delay of 500 milliseconds.
+     * This method is called when the video is paused and the header should be shown.
      */
     showHeader(): void {
         setTimeout(() => {
@@ -164,13 +125,20 @@ export class VideoPlayerComponent implements OnDestroy {
     }
 
     /**
-     * Cleanup function that destroys the HLS player and releases resources when the component is destroyed.
-     *
+     * Lifecycle hook that is called just before Angular destroys the component.
+     * It cleans up after the component by destroying the HLS player and releasing its resources,
+     * and pauses and resets the video element.
      */
     ngOnDestroy(): void {
         if (this.hls) {
             this.hls.destroy();
             this.hls = undefined;
+        }
+        const videoEl = this.videoRef?.nativeElement;
+        if (videoEl) {
+            videoEl.pause();
+            videoEl.removeAttribute('src');
+            videoEl.load();
         }
     }
 }

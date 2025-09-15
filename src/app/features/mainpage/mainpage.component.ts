@@ -1,11 +1,4 @@
-import {
-    Component,
-    OnInit,
-    OnDestroy,
-    ViewChild,
-    ElementRef,
-    signal,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import Hls from 'hls.js';
@@ -58,11 +51,22 @@ export class MainpageComponent implements OnInit, OnDestroy {
 
             const selected = this.selectRandomVideo(videos);
             this.video.set(selected);
-            this.videoUrl = this.videoService.getHlsUrl(selected.slug, '480p');
+            this.videoUrl = this.videoService.getHlsUrl(selected, '480p');
 
             this.handleBreakpoints();
             this.videoSections = this.groupVideosByGenre(videos, selected);
         });
+    }
+
+    /**
+     * Navigates to the video player page with the currently selected video.
+     * If no video is currently selected, the function does nothing.
+     */
+    playVideo(): void {
+        const v = this.video(); 
+        if (v) {
+            this.router.navigate(['/video-player'], { state: { video: v } });
+        }
     }
 
     /**
@@ -85,7 +89,6 @@ export class MainpageComponent implements OnInit, OnDestroy {
             .observe(['(min-width: 960px)'])
             .subscribe((result) => {
                 const videoEl = this.previewVideoRef?.nativeElement;
-
                 if (result.matches) {
                     this.attachPreviewHls();
                 } else {
@@ -101,7 +104,7 @@ export class MainpageComponent implements OnInit, OnDestroy {
                 }
             });
     }
-    
+
     /**
      * Groups the given videos by genre and puts the thumbnail of the selected video first in its genre.
      * @param videos The array of videos to group.
@@ -113,17 +116,14 @@ export class MainpageComponent implements OnInit, OnDestroy {
         selected: Video
     ): VideoSection[] {
         const grouped: { [genre: string]: string[] } = {};
-
         for (const v of videos) {
             if (!v.genre || !v.thumbnail) continue;
-
             if (v.id === selected.id) {
                 grouped[v.genre] = [v.thumbnail, ...(grouped[v.genre] || [])];
             } else {
                 grouped[v.genre] = [...(grouped[v.genre] || []), v.thumbnail];
             }
         }
-
         return Object.entries(grouped).map(([genre, images]) => ({
             title: genre,
             images,
@@ -135,7 +135,6 @@ export class MainpageComponent implements OnInit, OnDestroy {
      * video element, and attaches it to the video element. If the browser
      * does not support HLS or the video element is not available, the
      * video src is set to the video URL and the video is played.
-     *
      * Emits an error event if there is an error during the HLS initialization
      * or playback.
      */
@@ -167,23 +166,9 @@ export class MainpageComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigate to the video player page with the current video's slug as a query parameter
-     * if the video is available.
-     */
-    playVideo(): void {
-        const v = this.video();
-        if (v) {
-            this.router.navigate(['/video-player'], {
-                queryParams: { slug: v.slug },
-            });
-        }
-    }
-
-    /**
      * Handles the click event of an image in the main page.
      * If the breakpoint is above 960px, it navigates to the video player page with the slug of the
      * video that was clicked.
-     *
      * @param image The thumbnail URL of the clicked image.
      */
     onImageClick(image: string): void {
@@ -195,7 +180,7 @@ export class MainpageComponent implements OnInit, OnDestroy {
                 .observe(['(min-width: 960px)'])
                 .subscribe(() => {
                     this.router.navigate(['/video-player'], {
-                        queryParams: { slug: clicked.slug },
+                        state: { video: clicked },
                     });
                 });
         });
@@ -204,7 +189,6 @@ export class MainpageComponent implements OnInit, OnDestroy {
     /**
      * Returns the title of the given VideoSection, used as the trackBy function for
      * the video sections iterable in the main page template.
-     *
      * @param index The index of the VideoSection in the iterable.
      * @param section The VideoSection object.
      * @returns The title of the VideoSection.
@@ -216,7 +200,6 @@ export class MainpageComponent implements OnInit, OnDestroy {
     /**
      * Returns the image URL of the given image, used as the trackBy function for
      * the images iterable in the main page template.
-     *
      * @param index The index of the image in the iterable.
      * @param image The image URL.
      * @returns The image URL.
@@ -227,7 +210,6 @@ export class MainpageComponent implements OnInit, OnDestroy {
 
     /**
      * Cleanup function that destroys the HLS player and releases resources when the component is destroyed.
-     *
      */
     ngOnDestroy(): void {
         const videoEl = this.previewVideoRef?.nativeElement;

@@ -40,7 +40,7 @@ export interface SetPasswordPayload {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    private readonly baseUrl = 'http://localhost:8000/api';
+    private readonly baseUrl = 'https://157.180.86.208/api';
     private loggedInSubject = new BehaviorSubject<boolean>(false);
     public isLoggedIn$ = this.loggedInSubject.asObservable();
 

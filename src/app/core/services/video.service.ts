@@ -69,16 +69,30 @@ export class VideoService {
      * @returns A URL for the HLS video stream.
      */
     getHlsUrl(
-        videoIdOrSlug: number | string,
+        videoIdOrSlug: number | string | { id: number; thumbnail_url?: string; slug?: string },
         resolution: '480p' | '720p' | '1080p'
     ): string {
         let pathSegment: string;
 
         if (typeof videoIdOrSlug === 'number') {
             pathSegment = videoIdOrSlug.toString();
-        } else {
+        } else if (typeof videoIdOrSlug === 'string') {
             pathSegment = videoIdOrSlug.trim().replace(/[\s-]+/g, '_');
+        } else if (typeof videoIdOrSlug === 'object') {
+            if (videoIdOrSlug.slug) {
+                pathSegment = videoIdOrSlug.slug.trim().replace(/[\s-]+/g, '_');
+            } else if (videoIdOrSlug.thumbnail_url) {
+                pathSegment = videoIdOrSlug.thumbnail_url
+                    .split('/')
+                    .pop()!
+                    .replace('.jpg', '');
+            } else {
+                throw new Error('Video-Objekt ohne slug und thumbnail_url');
+            }
+        } else {
+            throw new Error('videoIdOrSlug ist undefined oder null');
         }
-        return `http://127.0.0.1:8000/media/videos/hls/${resolution}/${pathSegment}/index.m3u8`;
+
+        return `https://157.180.86.208/media/videos/hls/${resolution}/${pathSegment}/index.m3u8`;
     }
 }
